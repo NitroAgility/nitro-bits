@@ -1,2 +1,4 @@
 - name: install-eks-stack
   path: bits/install-eks-stack.yml
+- name: configure-eks-stack.yml
+  path: bits/configure-eks-stack.yml

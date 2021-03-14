@@ -1,6 +1,6 @@
 version: 1
 commands:
-- name: elk-stack
+- name: install-eks-stack
   description: Intall the EKS stack required by the pipeline.
   steps:
   - scripts:

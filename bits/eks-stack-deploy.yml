@@ -6,7 +6,7 @@ commands:
   - scripts:
     - > 
       cat <<'EOF'> docker.sh
-        #!/usr/bin/env bash
+        #!/usr/bin/sh
         if [[ $NITRO_BIT_DOCKER_BUILD_ARGS ]]; then
             eval "docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest . $NITRO_BIT_DOCKER_BUILD_ARGS"
         else

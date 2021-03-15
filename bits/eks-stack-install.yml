@@ -4,7 +4,7 @@ commands:
   description: Intall the EKS stack required by the pipeline.
   steps:
   - scripts:
-    - if [ -f ./variables.txt ]; then source ./variables.txt; fi
+    - if [ -f ./variables.txt ]; then bash . ./variables.txt; fi
     - if [ -f ./variables.txt ]; then export $(cut -d= -f1 ./variables.txt); fi
     - apt update
     - apt-get install -y curl

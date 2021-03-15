@@ -14,10 +14,15 @@ commands:
     - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
     - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
     - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
-    - >
-      if [[ $NITRO_BIT_HELM_ENABLED ]]; then
-        if [[ $NITRO_BIT_HELM_NAMESPACE ]]; then
+    - > 
+      cat <<EOF > helm.sh
+        #!/bin/bash
+        if [[ $NITRO_BIT_HELM_ENABLED ]]; then
+          if [[ $NITRO_BIT_HELM_NAMESPACE ]]; then
             helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER -n $NITRO_BIT_HELM_NAMESPACE
-        else
+          else
             helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER
         fi
+      EOF
+    - cat ./helm.sh
+    - chmod +x ./helm.sh && ./helm.sh

@@ -13,6 +13,7 @@ commands:
             docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest .
         fi
       EOF
+    - cat ./docker.sh
     - chmod +x ./docker.sh && ./docker.sh
     - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
     - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest

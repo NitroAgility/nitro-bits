@@ -1,6 +1,6 @@
 version: 1
 commands:
-- name: configure-eks-stack
+- name: eks-stack-configure
   description: Configure the EKS stack.
   steps:
   - scripts:

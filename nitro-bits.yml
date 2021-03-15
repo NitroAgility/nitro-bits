@@ -1,4 +1,6 @@
-- name: install-eks-stack
-  path: bits/install-eks-stack.yml
-- name: configure-eks-stack
-  path: bits/configure-eks-stack.yml
+- name: eks-stack-install
+  path: bits/eks-stack-install.yml
+- name: eks-stack-configure
+  path: bits/eks-stack-configure.yml
+- name: eks-stack-deploy
+  path: bits/eks-stack-deploy.yml

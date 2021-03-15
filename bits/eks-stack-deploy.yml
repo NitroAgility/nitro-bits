@@ -1,0 +1,23 @@
+version: 1
+commands:
+- name: install-eks-stack
+  description: Intall the EKS stack required by the pipeline.
+  steps:
+  - scripts:
+    - >
+      if [[ $NITRO_BIT_DOCKER_BUILD_ARGS ]]; then
+          eval "docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest . $NITRO_BIT_DOCKER_BUILD_ARGS"
+      else
+          docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest .
+      fi
+    - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
+    - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
+    - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
+    - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
+    - >
+      if [[ $NITRO_BIT_HELM_ENABLED ]]; then
+        if [[ $NITRO_BIT_HELM_NAMESPACE ]]; then
+            helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER -n $NITRO_BIT_HELM_NAMESPACE
+        else
+            helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER
+        fi

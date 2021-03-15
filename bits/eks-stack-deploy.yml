@@ -15,7 +15,7 @@ commands:
     - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
     - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER
     - > 
-      cat <<EOF > helm.sh
+      cat <<'EOF'> helm.sh
         #!/bin/bash
         if [[ $NITRO_BIT_HELM_ENABLED ]]; then
           if [[ $NITRO_BIT_HELM_NAMESPACE ]]; then
@@ -24,6 +24,5 @@ commands:
               helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOURCE/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER
           fi
         fi
-
       EOF
     - chmod +x ./helm.sh && ./helm.sh

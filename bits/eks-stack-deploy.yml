@@ -2,10 +2,19 @@ version: 1
 commands:
 - name: eks-stack-deploy
   description: Intall the EKS stack required by the pipeline.
-  continue_on_error: true
   steps:
   - scripts:
-    - docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest .
+    - > 
+      cat <<'EOF'> docker.sh
+        #!/usr/bin/sh
+        if [[ $NITRO_BIT_DOCKER_BUILD_ARGS ]]; then
+            eval "docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest . $NITRO_BIT_DOCKER_BUILD_ARGS"
+        else
+            docker build -t $NITRO_BIT_DOCKER_IMAGE_NAME:latest .
+        fi
+      EOF
+    - cat ./docker.sh
+    - chmod +x ./docker.sh && bash ./docker.sh
     - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
     - docker push $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:latest
     - docker tag $NITRO_BIT_DOCKER_IMAGE_NAME:latest $NITRO_BIT_DOCKER_REGISTRY/$NITRO_BIT_DOCKER_IMAGE_NAME:$NITRO_BIT_BUILD_NUMBER

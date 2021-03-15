@@ -17,12 +17,12 @@ commands:
     - > 
       cat <<EOF > helm.sh
         #!/bin/bash
-        if [[ $NITRO_BIT_HELM_ENABLED ]]; then
-          if [[ $NITRO_BIT_HELM_NAMESPACE ]]; then
-            helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER -n $NITRO_BIT_HELM_NAMESPACE
+        if [[ 1 ]]; then
+          if [[ contoflow ]]; then
+            helm upgrade --install contoflow "/chart/nitro-contoflow-ui" --set app.tag=2 -n contoflow
           else
-            helm upgrade --install $NITRO_BIT_HELM_RELEASE_NAME "$NITRO_BIT_HELM_CHART_SOUR/chart/$NITRO_BIT_HELM_CHART_NAME" --set app.tag=$NITRO_BIT_BUILD_NUMBER
+            helm upgrade --install contoflow "/chart/nitro-contoflow-ui" --set app.tag=2
+          fi
         fi
       EOF
-    - cat ./helm.sh
     - chmod +x ./helm.sh && ./helm.sh
